@@ -6,10 +6,12 @@ from core.io import Request
 from core.cli import init_cli
 from core.models.base import db, session
 
+from core.api.blueprints.merchants.views import merchants
+
 
 def register_blueprints(app):
     # TODO register your different blueprints here
-    pass
+    app.register_blueprint(merchants, url_prefix='/merchants')
 
 
 def bootstrap_app(app):
@@ -53,4 +55,5 @@ def create_app(config=None, **kwargs):
     bootstrap_app(app)
     init_cli(app)
 
+    print(app.url_map)
     return app
