@@ -18,7 +18,9 @@ depends_on = None
 
 def upgrade():
     op.create_index('index_user', 'transaction', ['id', 'user_id'])
+    op.create_index('index_merchant', 'transaction', ['id', 'user_id'])
 
 
 def downgrade():
     op.drop_index('index_user')
+    op.drop_index('index_merchant')
