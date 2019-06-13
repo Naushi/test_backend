@@ -7,11 +7,12 @@ from core.cli import init_cli
 from core.models.base import db, session
 
 from core.api.blueprints.merchants.views import merchants
+from core.api.blueprints.user.views import users
 
 
 def register_blueprints(app):
-    # TODO register your different blueprints here
     app.register_blueprint(merchants, url_prefix='/merchants')
+    app.register_blueprint(users, url_prefix='/users')
 
 
 def bootstrap_app(app):
