@@ -1,5 +1,6 @@
 from core.models.base import db, IntegerPK
 from core.models.all import User, Merchant
+from core.schema import ModelSchema
 
 
 class Transaction(IntegerPK):
@@ -20,3 +21,19 @@ class Transaction(IntegerPK):
     user = db.relationship(User, lazy=True, backref="transactions")
     merchant_id = db.Column(db.Integer, db.ForeignKey(Merchant.id))
     merchant = db.relationship(Merchant, lazy=True, backref="transactions")
+
+
+db.Index('user_index', Transaction.id, Transaction.user_id)
+db.Index('merchant_index', Transaction.id, Transaction.merchant_id)
+
+
+class TransactionSchema(ModelSchema):
+    """
+    Shema describing the serialization of the Transaction Model
+    """
+
+    class Meta:
+        model = Transaction
+
+
+Transaction.schema_class = TransactionSchema
