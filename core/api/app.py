@@ -1,13 +1,14 @@
 from flask import jsonify, request, Flask
 from flask_uuid import FlaskUUID
+from flask_restplus import Api
 
 from core.json import JSONEncoder
 from core.io import Request
 from core.cli import init_cli
 from core.models.base import db, session
 
-from core.api.blueprints.merchants.views import merchants
-from core.api.blueprints.user.views import users
+from core.api.blueprints.merchants import merchants
+from core.api.blueprints.user import users
 
 
 def register_blueprints(app):
@@ -23,6 +24,7 @@ def bootstrap_app(app):
 
 
 def create_app(config=None, **kwargs):
+    api = Api()
     app = Flask(__name__, static_folder=None, **kwargs)
     app.request_class = Request
     app.url_map.strict_slashes = False
@@ -57,4 +59,5 @@ def create_app(config=None, **kwargs):
     init_cli(app)
 
     print(app.url_map)
+    api.init_app(app)
     return app
