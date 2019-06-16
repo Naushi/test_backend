@@ -7,8 +7,8 @@ from core.io import Request
 from core.cli import init_cli
 from core.models.base import db, session
 
-from core.api.blueprints.merchants import merchants
-from core.api.blueprints.user import users
+from core.api.blueprints.merchants.views import merchants
+from core.api.blueprints.user.views import users
 
 
 def register_blueprints(app):
