@@ -4,7 +4,7 @@ from sqlalchemy import func
 from datetime import date
 from calendar import monthrange
 
-from . import merchants, merchants_api
+from . import merchants_api,  merchants
 from core.models.all import Transaction
 from core.models.base import session
 
