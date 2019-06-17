@@ -1,5 +1,4 @@
 import logging
-import pytest
 
 from flask.json import dumps
 from flask.testing import FlaskClient
@@ -55,6 +54,58 @@ def app(request, tmp_media_dir):
     migrate(db_session.connection(), "head")
 
     db_session.commit()
+
+    from core.models.all import Merchant, session
+    from core.models.all import db as _db
+    from data.merchant_name import merchant_names
+    for name in merchant_names:
+        Merchant(name=name).save()
+    session.commit()
+
+    engine = _db.engine
+    insert_user = (
+        f"""insert into "user" (email) select
+                 concat('user', generate_series(1, 1000), '@test.com');"""
+    )
+    engine.execute(
+        insert_user
+    )
+    session.commit()
+
+    insert_transaction = (
+        f"""
+                insert into transaction(amount, descriptor, user_id, executed_at)
+                select amount, descriptor, user_id, executed_at from (
+                    select
+                        generate_series(1, 10000),
+                        (random() * 100)::decimal(6, 2) as 
+                            amount,
+                        'TUI' as 
+                            descriptor, 
+                        1 as 
+                            user_id,
+                        NOW() - '1 year'::INTERVAL * ROUND(RANDOM() * 100) as
+                            executed_at
+                ) as data;
+                """
+    )
+    engine.execute(
+        insert_transaction
+    )
+    session.commit()
+
+    update_transaction = (
+        """
+        update transaction
+            set merchant_id = merchant.id
+            from merchant
+                where transaction.descriptor = merchant.name;
+        """
+    )
+    engine.execute(
+        update_transaction
+    )
+    session.commit()
 
     yield app
 
