@@ -8,8 +8,8 @@ from core.io import Request
 from core.cli import init_cli
 from core.models.base import db, session
 
-from core.api.blueprints.merchants.views import merchants
-from core.api.blueprints.user.views import users
+from core.api.blueprints.merchants.resources import merchants
+from core.api.blueprints.user.resources import users
 
 
 def register_blueprints(app):
@@ -60,5 +60,6 @@ def create_app(config=None, **kwargs):
     bootstrap_app(app)
     init_cli(app)
 
+    print(app.url_map)
     api.init_app(app)
     return app
