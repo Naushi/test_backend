@@ -1,6 +1,7 @@
 from flask import jsonify, request, Flask
 from flask_uuid import FlaskUUID
 from flask_restplus import Api
+from dotenv import load_dotenv
 
 from core.json import JSONEncoder
 from core.io import Request
@@ -24,6 +25,7 @@ def bootstrap_app(app):
 
 
 def create_app(config=None, **kwargs):
+    load_dotenv()
     api = Api()
     app = Flask(__name__, static_folder=None, **kwargs)
     app.request_class = Request
@@ -58,6 +60,5 @@ def create_app(config=None, **kwargs):
     bootstrap_app(app)
     init_cli(app)
 
-    print(app.url_map)
     api.init_app(app)
     return app
